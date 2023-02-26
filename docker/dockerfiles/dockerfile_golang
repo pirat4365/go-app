@@ -17,4 +17,4 @@ WORKDIR /app
 COPY --from=builder /app/.env /app/.env
 COPY --from=builder /app/main /app/main
 
-CMD ["/app/runserver"]
+CMD ["/app/main"]
