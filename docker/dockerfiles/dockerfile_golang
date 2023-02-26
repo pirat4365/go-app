@@ -1,0 +1,17 @@
+FROM golang:latest AS builder
+
+WORKDIR /build
+
+ADD go.mod .
+
+COPY ./ /build
+
+RUN CGO_ENABLED=0 GOOS=linux go build -ldflags="-s -w" -o /app/runserver /build/commands/runserver.go
+
+FROM alpine
+
+WORKDIR /app
+
+COPY --from=builder /app/runserver /app/runserver
+
+CMD ["/app/runserver"]

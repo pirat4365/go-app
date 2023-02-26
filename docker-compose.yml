@@ -1,0 +1,29 @@
+version: "3.1"
+services:
+  golang-api:
+    ports:
+      - 80:80
+    build:
+      context: .
+      dockerfile: docker/dockerfiles/dockerfile_golang
+    networks:
+      - web
+
+  database:
+    image: postgres:15
+    restart: always
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_PASSWORD: root
+      POSTGRES_USER: root
+    networks:
+      - web
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+networks:
+  web:
