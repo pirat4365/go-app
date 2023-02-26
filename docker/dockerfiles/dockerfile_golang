@@ -6,12 +6,15 @@ ADD go.mod .
 
 COPY ./ /build
 
-RUN CGO_ENABLED=0 GOOS=linux go build -ldflags="-s -w" -o /app/runserver /build/commands/runserver.go
+COPY /config/.env /app/
+
+RUN CGO_ENABLED=0 GOOS=linux go build -ldflags="-s -w" -o /app/main /build/main.go
 
 FROM alpine
 
 WORKDIR /app
 
-COPY --from=builder /app/runserver /app/runserver
+COPY --from=builder /app/.env /app/.env
+COPY --from=builder /app/main /app/main
 
 CMD ["/app/runserver"]
